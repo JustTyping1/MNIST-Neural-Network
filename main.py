@@ -8,14 +8,14 @@ def sigmoid(Z):
     return A
 
 def softmax(Z):
-    Ztransform = Z - np.max(Z)
-    A = np.exp(Ztransform)/(np.sum(np.exp(Ztransform)))
+    Ztransform = Z - np.max(Z, axis = 1, keepdims=True)
+    A = np.exp(Ztransform)/(np.sum(np.exp(Ztransform), axis = 1, keepdims=True))
     return A
 
 def cost(Y, A):
     return (-1/len(Y))* np.sum(Y * np.log(A))
 
-def forwardprop(X, weights, biases, layers):
+def forwardprop(X, weights, biases):
     Zcache = []
     Acache = []
 
@@ -35,10 +35,6 @@ def forwardprop(X, weights, biases, layers):
 
     return A, Zcache, Acache
 
-    
-
-
-
 
 # Load in the data
 train_data = pd.read_csv("./input/train.csv")
@@ -47,6 +43,11 @@ train_labels=np.array(train_data.loc[:,'label'])
 train_data=np.array(train_data.loc[:,train_data.columns!='label'])
 
 train_data = train_data.reshape(42000, 784)
+
+Y = np.zeros(shape=(42000,10))
+
+for i in range(len(Y)):
+    Y[i][train_labels[i]] = 1
 
 layers = [784, 128, 10]
 
@@ -65,4 +66,10 @@ A_1 = sigmoid(Z_1)
 Z_2 = A_1 @ weights[1] + biases[1]
 A_2 = softmax(Z_2)
 
-print(A_2.shape)
+A, Zcache, Acache = forwardprop(train_data, weights, biases)
+
+print(len(Zcache))
+print(len(Acache))
+
+print(Zcache[0].shape)
+print(Acache[0].shape)
