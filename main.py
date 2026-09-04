@@ -60,12 +60,6 @@ for i in range(len(layers)-1):
     bias = np.zeros(shape=[1,layers[i+1]])
     biases.append(bias)
 
-Z_1 = train_data @ weights[0] + biases[0]
-A_1 = sigmoid(Z_1)
-
-Z_2 = A_1 @ weights[1] + biases[1]
-A_2 = softmax(Z_2)
-
 A, Zcache, Acache = forwardprop(train_data, weights, biases)
 
 print(len(Zcache))
